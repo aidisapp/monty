@@ -1,110 +1,103 @@
 #include "monty.h"
 
 /**
- * free_stack - Frees the memory associated with a stack.
- * @stack: Double pointer to the beginning of the stack.
+ * get_instruction - Get Monty bytecode instructions.
+ * @token: bytecode operator input
+ * Return: pointer to operation function
  */
-
-void free_stack(stack_t **stack)
+void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 {
-	stack_t *current = *stack;
-	stack_t *next;
-
-	while (current != NULL)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
-
-	*stack = NULL;
-}
-
-/**
- * get_instructions - Get Monty bytecode instructions.
- * Return: Array of instruction_t structures.
- */
-
-instruction_t *get_instructions(void)
-{
-	static instruction_t instructions[] = {
-			{"push", push},
+	int count;
+	instruction_t instruction_s[] = {
 			{"pall", pall},
 			{NULL, NULL}};
 
-	return (instructions);
+	count = 0;
+	while (instruction_s[count].f != NULL)
+	{
+		if (strcmp(token, instruction_s[count].opcode) == 0)
+			return (instruction_s[count].f);
+		count++;
+	}
+	return (NULL);
 }
 
 /**
- * execute_instruction - Executes a Monty bytecode instruction.
- * @stack: Double pointer to the beginning of the stack.
- * @line: The instruction line from the Monty bytecode file.
- * @line_number: Line number in the Monty bytecode file.
+ * main - entry into interpreter
+ * @argc: argument count
+ * @argv: arguments
+ * Return: 0 on success
  */
-
-void execute_instruction(stack_t **stack, char *line, unsigned int line_number)
-{
-	char *opcode = strtok(line, " \t\n");
-	instruction_t *instructions = get_instructions();
-
-	if (opcode == NULL || opcode[0] == '#')
-	{
-		free(instructions);
-		return;
-	}
-	while (instructions->opcode)
-	{
-		if (strcmp(opcode, instructions->opcode) == 0)
-		{
-			instructions->f(stack, line_number);
-			free(instructions);
-			return;
-		}
-		instructions++;
-	}
-	fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
-	free(instructions);
-	exit(EXIT_FAILURE);
-}
-
-/**
- * main - Monty bytecode interpreter.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line arguments.
- * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-
 int main(int argc, char *argv[])
 {
-	FILE *file;
-	char *line = NULL;
-	size_t len = 0;
-	unsigned int line_number = 0;
-	stack_t *stack = NULL;
+	int file_descriptor, is_push = 0;
+	unsigned int line_number = 1;
+	ssize_t bytes_read;
+	char *buffer, *token;
+	stack_t *stack_head = NULL;
 
 	if (argc != 2)
 	{
-		fprintf(stderr, "Usage: %s file\n", argv[0]);
-		return (EXIT_FAILURE);
+		printf("USAGE: monty file\n");
+		exit(EXIT_FAILURE);
 	}
 
-	file = fopen(argv[1], "r");
-	if (!file)
+	file_descriptor = open(argv[1], O_RDONLY);
+	if (file_descriptor == -1)
 	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		return (EXIT_FAILURE);
+		printf("Error: Can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
 	}
 
-	while (getline(&line, &len, file) != -1)
+	buffer = malloc(sizeof(char) * 10000);
+	if (!buffer)
+		return (0);
+
+	bytes_read = read(file_descriptor, buffer, 10000);
+	if (bytes_read == -1)
 	{
+		free(buffer);
+		close(file_descriptor);
+		exit(EXIT_FAILURE);
+	}
+
+	token = strtok(buffer, "\n\t\a\r ;:");
+	while (token != NULL)
+	{
+		if (is_push == 1)
+		{
+			push(&stack_head, line_number, token);
+			is_push = 0;
+			token = strtok(NULL, "\n\t\a\r ;:");
+			line_number++;
+			continue;
+		}
+		else if (strcmp(token, "push") == 0)
+		{
+			is_push = 1;
+			token = strtok(NULL, "\n\t\a\r ;:");
+			continue;
+		}
+		else
+		{
+			if (get_instruction(token) != 0)
+			{
+				get_instruction(token)(&stack_head, line_number);
+			}
+			else
+			{
+				free_list(&stack_head);
+				printf("L%d: unknown instruction %s\n", line_number, token);
+				exit(EXIT_FAILURE);
+			}
+		}
 		line_number++;
-		execute_instruction(&stack, line, line_number);
+		token = strtok(NULL, "\n\t\a\r ;:");
 	}
 
-	free_stack(&stack);
-	fclose(file);
-	if (line)
-		free(line);
-
-	return (EXIT_SUCCESS);
+	free_list(&stack_head);
+	free(buffer);
+	close(file_descriptor);
+	return (0);
 }
+

@@ -6,7 +6,6 @@
 * @n: integer data for the new node
 * Return: 0 on success, -1 on failure
 */
-
 int add_node(stack_t **head, int n)
 {
 stack_t *new_node = malloc(sizeof(stack_t));
@@ -39,55 +38,31 @@ return (0);
 
 /**
 * delete_node - deletes the last node in a doubly linked list
-* @list: pointer to the head node of the linked list
+* @head: pointer to the head node of the linked list
 */
-void delete_node(stack_t *list)
+void delete_node(stack_t *head)
 {
 stack_t *node_to_delete = NULL;
 
-if (list->next == NULL)
+if (head->next == NULL)
 {
-	node_to_delete = list;
-	list = NULL;
+	node_to_delete = head;
+	head = NULL;
 }
 else
 {
-	node_to_delete = list;
-	list = list->next;
-	list->prev = NULL;
+	node_to_delete = head;
+	head = head->next;
+	head->prev = NULL;
 }
 
 free(node_to_delete);
 }
 
 /**
-* push - Pushes an element to the stack.
-* @stack: Double pointer to the beginning of the stack.
-* @line_num: Line number in the Monty bytecodes file.
+* free_list - frees an int linked list
+* @head: pointer to the head node of the doubly list
 */
-
-void push(stack_t **stack, unsigned int line_num)
-{
-char *arg_token = strtok(NULL, " \n");
-
-if (!arg_token || (!isdigit(*arg_token) && *arg_token != '-'))
-{
-	fprintf(stderr, "L%u: usage: push integer\n", line_num);
-	exit(EXIT_FAILURE);
-}
-
-if (!add_node(stack, atoi(arg_token)))
-{
-	fprintf(stderr, "Error: malloc failed\n");
-	exit(EXIT_FAILURE);
-}
-}
-
-/**
-* free_list - frees a doubly linked list with only int data, no strings
-* @head: pointer to the head of the list
-*/
-
 void free_list(stack_t **head)
 {
 if (!head || !(*head))
@@ -100,3 +75,47 @@ while (*head && (*head)->next)
 }
 free(*head);
 }
+
+/**
+* push - Pushes an element to the stack.
+* @head: Double pointer to the beginning of the stack.
+* @line_num: Line number in the Monty bytecodes file.
+*/
+void push(stack_t **head, unsigned int line_num)
+{
+char *arg_token = strtok(NULL, " \n");
+
+if (!arg_token || (!isdigit(*arg_token) && *arg_token != '-'))
+{
+	fprintf(stderr, "L%u: usage: push integer\n", line_num);
+	exit(EXIT_FAILURE);
+}
+
+if (!add_node(head, atoi(arg_token)))
+{
+	free_list(head);
+	fprintf(stderr, "Error: memory allocation failed\n");
+	exit(EXIT_FAILURE);
+}
+}
+
+/**
+* pall - prints all nodes in the stack
+* @head: pointer to the head of the stack
+* @line_num: bytecode line number (unused in this function)
+*/
+void pall(stack_t **head, __attribute__((unused)) unsigned int line_num)
+{
+stack_t *temp_node = NULL;
+
+if (!head || !*head)
+	return;
+
+temp_node = *head;
+while (temp_node != NULL)
+{
+	printf("%d\n", temp_node->n);
+	temp_node = temp_node->next;
+}
+}
+
