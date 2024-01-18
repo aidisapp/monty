@@ -80,22 +80,25 @@ free(*head);
 * push - Pushes an element to the stack.
 * @head: Double pointer to the beginning of the stack.
 * @line_num: Line number in the Monty bytecodes file.
+* @token: token character
 */
-void push(stack_t **head, unsigned int line_num)
+void push(stack_t **head, unsigned int line_num, const char *token)
 {
-char *arg_token = strtok(NULL, " \n");
-
-if (!arg_token || (!isdigit(*arg_token) && *arg_token != '-'))
+if (!head)
+	return;
+if (is_digit(token) == -1)
 {
-	fprintf(stderr, "L%u: usage: push integer\n", line_num);
+	printf("L%u: usage: push stack\n", line_num);
+	free_list(head);
 	exit(EXIT_FAILURE);
 }
-
-if (!add_node(head, atoi(arg_token)))
+else
 {
+	if (add_node(head, atoi(token)) == -1)
+	{
 	free_list(head);
-	fprintf(stderr, "Error: memory allocation failed\n");
 	exit(EXIT_FAILURE);
+	}
 }
 }
 
