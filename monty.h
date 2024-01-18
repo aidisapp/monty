@@ -45,10 +45,15 @@ void (*f)(stack_t **stack, unsigned int line_number);
 
 } instruction_t;
 
-void push(stack_t **stack, unsigned int line_num);
-void pall(stack_t **stack, __attribute__((unused)) unsigned int line_num);
-stack_t *add_node(stack_t **stack, int n);
-void free_stack(stack_t **stack);
-int _isdigit(int character);
+int add_node(stack_t **head, int n);
+void delete_node(stack_t *head);
+void free_list(stack_t **head);
+void push(stack_t **head, unsigned int line_num, const char *token);
+void pall(stack_t **head, __attribute__((unused)) unsigned int line_num);
+
+void (*get_instruction(char *token))(stack_t **head, unsigned int line_num);
+
+int is_digit(const char *str);
 
 #endif
+
