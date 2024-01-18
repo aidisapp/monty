@@ -3,13 +3,6 @@
 ## Overview
 Group project for ALX. Monty interpreter in C. Focus on stacks, queues, LIFO, FIFO.
 
-## Details
-- **Author:** Julien Barbier
-- **Team:** Prosper Atu, Idongesit Ekanem
-- **Start:** Jan 16, 2024, 6 AM
-- **End:** Jan 19, 2024, 6 AM
-- **Checker Release:** Jan 17, 2024, 12 AM
-
 ## Objectives
 LIFO, FIFO, Stack, Queue, global variables in C.
 
