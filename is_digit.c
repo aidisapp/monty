@@ -5,6 +5,7 @@
 * @str: input string
 * Return: 0 if all characters are digits, else -1
 */
+
 int is_digit(const char *str)
 {
 int i = 0;
