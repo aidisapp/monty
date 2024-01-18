@@ -6,6 +6,7 @@
 * @n: integer data for the new node
 * Return: 0 on success, -1 on failure
 */
+
 int add_node(stack_t **head, int n)
 {
 stack_t *new_node = malloc(sizeof(stack_t));
@@ -64,6 +65,7 @@ free(node_to_delete);
 * @stack: Double pointer to the beginning of the stack.
 * @line_num: Line number in the Monty bytecodes file.
 */
+
 void push(stack_t **stack, unsigned int line_num)
 {
 char *arg_token = strtok(NULL, " \n");
@@ -85,6 +87,7 @@ if (!add_node(stack, atoi(arg_token)))
 * free_list - frees a doubly linked list with only int data, no strings
 * @head: pointer to the head of the list
 */
+
 void free_list(stack_t **head)
 {
 if (!head || !(*head))
@@ -97,4 +100,3 @@ while (*head && (*head)->next)
 }
 free(*head);
 }
-
