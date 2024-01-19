@@ -1,9 +1,6 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-#define _GNU_SOURCE
-#define _POSIX_C_SOURCE 200809L
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +9,8 @@
 #include <ctype.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#define BUFFER_SIZE 1024
 
 /**
 * struct stack_s - doubly linked list representation of a stack (or queue)
