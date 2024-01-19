@@ -63,7 +63,7 @@ void process_file(FILE *file, stack_t **stack_head)
  * @line_number: Current line number in the Monty ByteCodes file
  */
 
-void process_token(char *token, stack_t **stack_head, unsigned int line_number)
+void process_token(char *token, stack_t **stack_head, unsigned int line_num)
 {
 	void (*operator_function)(stack_t **stack, unsigned int line_number);
 
@@ -97,7 +97,6 @@ void process_token(char *token, stack_t **stack_head, unsigned int line_number)
 int main(int argc, char *argv[])
 {
 	FILE *file;
-
 	stack_t *stack_head;
 
 	if (argc != 2)
