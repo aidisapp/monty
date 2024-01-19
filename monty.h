@@ -46,7 +46,7 @@ void (*f)(stack_t **stack, unsigned int line_number);
 
 void (*get_instruction(char *token))(stack_t **head, unsigned int line_num);
 void process_file(FILE *file, stack_t **stack_head);
-void process_token(char *token, stack_t **stack_head, unsigned int line_number);
+void process_token(char *token, stack_t **stack_head, unsigned int line_num);
 
 int add_node(stack_t **head, int n);
 void delete_node(stack_t *head);
