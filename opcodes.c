@@ -40,23 +40,22 @@ return (0);
 * delete_node - deletes the last node in a doubly linked list
 * @head: pointer to the head node of the linked list
 */
-void delete_node(stack_t *head)
+void delete_node(stack_t **head)
 {
-stack_t *node_to_delete = NULL;
+	stack_t *node_to_del = NULL;
 
-if (head->next == NULL)
-{
-	node_to_delete = head;
-	head = NULL;
-}
-else
-{
-	node_to_delete = head;
-	head = head->next;
-	head->prev = NULL;
-}
-
-free(node_to_delete);
+	node_to_del = *head;
+	if ((*head)->next == NULL)
+	{
+		*head = NULL;
+		free(node_to_del);
+	}
+	else
+	{
+		*head = (*head)->next;
+		(*head)->prev = NULL;
+		free(node_to_del);
+	}
 }
 
 /**
@@ -82,31 +81,25 @@ free(*head);
 * @line_num: Line number in the Monty bytecodes file.
 * @token: token character
 */
-
 void push(stack_t **head, unsigned int line_num, const char *token)
 {
-	int value;
-
-	if (!head || !token)
-		return;
-
-	if (is_digit(token) == -1)
+if (!head)
+	return;
+if (is_digit(token) == -1)
+{
+	printf("L%u: usage: push stack\n", line_num);
+	free_list(head);
+	exit(EXIT_FAILURE);
+}
+else
+{
+	if (add_node(head, atoi(token)) == -1)
 	{
-		fprintf(stderr, "L%u: usage: push integer\n", line_num);
-		free_list(head);
-		exit(EXIT_FAILURE);
-	}
-
-	value = atoi(token);
-
-	if (add_node(head, value) == -1)
-	{
-		fprintf(stderr, "L%u: failed to push element to the stack\n", line_num);
-		free_list(head)
-		exit(EXIT_FAILURE);
+	free_list(head);
+	exit(EXIT_FAILURE);
 	}
 }
-
+}
 
 /**
 * pall - prints all nodes in the stack
