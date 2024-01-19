@@ -32,11 +32,8 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 void process_file(FILE *file, stack_t **stack_head)
 {
 	unsigned int line_number = 1;
-
-	char *buffer = malloc(sizeof(char) * BUFFER_SIZE);
-
+	char *buffer = malloc(sizeof(char) * BUFFER_SIZE), *token;
 	ssize_t bytes_read;
-
 
 	if (!buffer)
 	{
@@ -46,7 +43,7 @@ void process_file(FILE *file, stack_t **stack_head)
 
 	while ((bytes_read = fread(buffer, 1, BUFFER_SIZE, file)) > 0)
 	{
-		char *token = strtok(buffer, "\n\t\a\r ;:");
+		token = strtok(buffer, "\n\t\a\r ;:");
 
 		while (token != NULL)
 		{
