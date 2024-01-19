@@ -8,19 +8,19 @@
 
 void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 {
-        int count;
-        instruction_t instruction_s[] = {
-                        {"pall", pall},
-                        {NULL, NULL}};
+	int count;
+	instruction_t instruction_s[] = {
+			{"pall", pall},
+			{NULL, NULL}};
 
-        count = 0;
-        while (instruction_s[count].f != NULL)
-        {
-                if (strcmp(token, instruction_s[count].opcode) == 0)
-                        return (instruction_s[count].f);
-                count++;
-        }
-        return (NULL);
+	count = 0;
+	while (instruction_s[count].f != NULL)
+	{
+		if (strcmp(token, instruction_s[count].opcode) == 0)
+			return (instruction_s[count].f);
+		count++;
+	}
+	return (NULL);
 }
 
 /**
@@ -60,28 +60,28 @@ void process_file(FILE *file, stack_t **stack_head)
  * process_token - Process a token from the Monty ByteCodes file.
  * @token: Token to be processed
  * @stack_head: Pointer to the head of the stack
- * @line_number: Current line number in the Monty ByteCodes file
+ * @line_num: Current line number in the Monty ByteCodes file
  */
 
 void process_token(char *token, stack_t **stack_head, unsigned int line_num)
 {
-	void (*operator_function)(stack_t **stack, unsigned int line_number);
+	void (*operator_function)(stack_t **stack, unsigned int line_num);
 
 	if (strcmp(token, "push") == 0)
 	{
-		push(stack_head, line_number, strtok(NULL, "\n\t\a\r ;:"));
+		push(stack_head, line_num, strtok(NULL, "\n\t\a\r ;:"));
 	}
 	else
 	{
 		operator_function = get_instruction(token);
 		if (operator_function != NULL)
 		{
-			operator_function(stack_head, line_number);
+			operator_function(stack_head, line_num);
 		}
 		else
 		{
 			free_list(stack_head);
-			fprintf(stderr, "L%d: unknown instruction %s\n", line_number, token);
+			fprintf(stderr, "L%d: unknown instruction %s\n", line_num, token);
 			exit(EXIT_FAILURE);
 		}
 	}
