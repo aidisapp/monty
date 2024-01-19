@@ -9,18 +9,11 @@
 void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 {
 	int count;
-<<<<<<< HEAD
-
 	instruction_t instruction_s[] = {
-		{"pall", pall},
-		{"push", push},
-		{NULL, NULL}
-	};
-=======
-	instruction_t instruction_s[] = {
+			{"pint", pint},
 			{"pall", pall},
+			{"pop", pop},
 			{NULL, NULL}};
->>>>>>> 9ddcda2d639fae299ad2e688ac0f47e611fe739c
 
 	count = 0;
 	while (instruction_s[count].f != NULL)
