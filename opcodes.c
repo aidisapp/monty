@@ -82,25 +82,31 @@ free(*head);
 * @line_num: Line number in the Monty bytecodes file.
 * @token: token character
 */
+
 void push(stack_t **head, unsigned int line_num, const char *token)
 {
-if (!head)
-	return;
-if (is_digit(token) == -1)
-{
-	printf("L%u: usage: push stack\n", line_num);
-	free_list(head);
-	exit(EXIT_FAILURE);
-}
-else
-{
-	if (add_node(head, atoi(token)) == -1)
+	int value;
+
+	if (!head || !token)
+		return;
+
+	if (is_digit(token) == -1)
 	{
-	free_list(head);
-	exit(EXIT_FAILURE);
+		fprintf(stderr, "L%u: usage: push integer\n", line_num);
+		free_list(head);
+		exit(EXIT_FAILURE);
+	}
+
+	value = atoi(token);
+
+	if (add_node(head, value) == -1)
+	{
+		fprintf(stderr, "L%u: failed to push element to the stack\n", line_num);
+		free_list(head)
+		exit(EXIT_FAILURE);
 	}
 }
-}
+
 
 /**
 * pall - prints all nodes in the stack

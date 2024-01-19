@@ -10,19 +10,22 @@
 
 void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 {
-        int count;
-        instruction_t instruction_s[] = {
-                        {"pall", pall},
-                        {NULL, NULL}};
+	int count;
 
-        count = 0;
-        while (instruction_s[count].f != NULL)
-        {
-                if (strcmp(token, instruction_s[count].opcode) == 0)
-                        return (instruction_s[count].f);
-                count++;
-        }
-        return (NULL);
+	instruction_t instruction_s[] = {
+		{"pall", pall},
+		{"push", push},
+		{NULL, NULL}
+	};
+
+	count = 0;
+	while (instruction_s[count].f != NULL)
+	{
+		if (strcmp(token, instruction_s[count].opcode) == 0)
+			return (instruction_s[count].f);
+		count++;
+	}
+	return (NULL);
 }
 
 /**
