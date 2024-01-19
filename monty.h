@@ -55,5 +55,7 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num);
 
 int is_digit(const char *str);
 
-#endif
+void process_file(FILE *file, stack_t **stack_head);
+void process_token(char *token, stack_t **stack_head, unsigned int line_number);
 
+#endif

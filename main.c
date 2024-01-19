@@ -1,103 +1,130 @@
 #include "monty.h"
 
+#define BUFFER_SIZE 1024
+
 /**
  * get_instruction - Get Monty bytecode instructions.
  * @token: bytecode operator input
  * Return: pointer to operation function
  */
+
 void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 {
-	int count;
-	instruction_t instruction_s[] = {
-			{"pall", pall},
-			{NULL, NULL}};
+        int count;
+        instruction_t instruction_s[] = {
+                        {"pall", pall},
+                        {NULL, NULL}};
 
-	count = 0;
-	while (instruction_s[count].f != NULL)
-	{
-		if (strcmp(token, instruction_s[count].opcode) == 0)
-			return (instruction_s[count].f);
-		count++;
-	}
-	return (NULL);
+        count = 0;
+        while (instruction_s[count].f != NULL)
+        {
+                if (strcmp(token, instruction_s[count].opcode) == 0)
+                        return (instruction_s[count].f);
+                count++;
+        }
+        return (NULL);
 }
 
 /**
- * main - entry into interpreter
- * @argc: argument count
- * @argv: arguments
- * Return: 0 on success
+ * process_file - Read the Monty ByteCodes file and process each line.
+ * @file: File pointer to the Monty ByteCodes file
+ * @stack_head: Pointer to the head of the stack
  */
-int main(int argc, char *argv[])
+
+void process_file(FILE *file, stack_t **stack_head)
 {
-	int file_descriptor, is_push = 0;
 	unsigned int line_number = 1;
+
+	char *buffer = malloc(sizeof(char) * BUFFER_SIZE);
+
 	ssize_t bytes_read;
-	char *buffer, *token;
-	stack_t *stack_head = NULL;
 
-	if (argc != 2)
-	{
-		printf("USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
 
-	file_descriptor = open(argv[1], O_RDONLY);
-	if (file_descriptor == -1)
-	{
-		printf("Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-
-	buffer = malloc(sizeof(char) * 10000);
 	if (!buffer)
-		return (0);
-
-	bytes_read = read(file_descriptor, buffer, 10000);
-	if (bytes_read == -1)
 	{
-		free(buffer);
-		close(file_descriptor);
+		fclose(file);
 		exit(EXIT_FAILURE);
 	}
 
-	token = strtok(buffer, "\n\t\a\r ;:");
-	while (token != NULL)
+	while ((bytes_read = fread(buffer, 1, BUFFER_SIZE, file)) > 0)
 	{
-		if (is_push == 1)
+		char *token = strtok(buffer, "\n\t\a\r ;:");
+
+		while (token != NULL)
 		{
-			push(&stack_head, line_number, token);
-			is_push = 0;
+			process_token(token, stack_head, line_number);
 			token = strtok(NULL, "\n\t\a\r ;:");
 			line_number++;
-			continue;
 		}
-		else if (strcmp(token, "push") == 0)
+	}
+
+	free(buffer);
+}
+
+/**
+ * process_token - Process a token from the Monty ByteCodes file.
+ * @token: Token to be processed
+ * @stack_head: Pointer to the head of the stack
+ * @line_number: Current line number in the Monty ByteCodes file
+ */
+
+void process_token(char *token, stack_t **stack_head, unsigned int line_number)
+{
+	void (*operator_function)(stack_t **stack, unsigned int line_number);
+
+	if (strcmp(token, "push") == 0)
+	{
+		push(stack_head, line_number, strtok(NULL, "\n\t\a\r ;:"));
+	}
+	else
+	{
+		operator_function = get_instruction(token);
+		if (operator_function != NULL)
 		{
-			is_push = 1;
-			token = strtok(NULL, "\n\t\a\r ;:");
-			continue;
+			operator_function(stack_head, line_number);
 		}
 		else
 		{
-			if (get_instruction(token) != 0)
-			{
-				get_instruction(token)(&stack_head, line_number);
-			}
-			else
-			{
-				free_list(&stack_head);
-				printf("L%d: unknown instruction %s\n", line_number, token);
-				exit(EXIT_FAILURE);
-			}
+			free_list(stack_head);
+			fprintf(stderr, "L%d: unknown instruction %s\n", line_number, token);
+			exit(EXIT_FAILURE);
 		}
-		line_number++;
-		token = strtok(NULL, "\n\t\a\r ;:");
 	}
-
-	free_list(&stack_head);
-	free(buffer);
-	close(file_descriptor);
-	return (0);
 }
 
+/**
+ * main - Main entry point into the interpreter.
+ * @argc: Number of command-line arguments
+ * @argv: Array of command-line arguments
+ * Return: 0 on success, EXIT_FAILURE on failure
+ */
+
+int main(int argc, char *argv[])
+{
+	FILE *file;
+
+	stack_t *stack_head;
+
+	if (argc != 2)
+	{
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+	}
+
+	file = fopen(argv[1], "r");
+
+	if (file == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+
+	stack_head = NULL;
+
+	process_file(file, &stack_head);
+
+	free_list(&stack_head);
+	fclose(file);
+
+	return (0);
+}
