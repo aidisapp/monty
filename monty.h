@@ -1,9 +1,6 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-#define _GNU_SOURCE
-#define _POSIX_C_SOURCE 200809L
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +9,8 @@
 #include <ctype.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#define BUFFER_SIZE 1024
 
 /**
 * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -45,17 +44,16 @@ void (*f)(stack_t **stack, unsigned int line_number);
 
 } instruction_t;
 
+void (*get_instruction(char *token))(stack_t **head, unsigned int line_num);
+void process_file(FILE *file, stack_t **stack_head);
+void process_token(char *token, stack_t **stack_head, unsigned int line_num);
+
 int add_node(stack_t **head, int n);
 void delete_node(stack_t *head);
 void free_list(stack_t **head);
 void push(stack_t **head, unsigned int line_num, const char *token);
 void pall(stack_t **head, __attribute__((unused)) unsigned int line_num);
 
-void (*get_instruction(char *token))(stack_t **head, unsigned int line_num);
-
 int is_digit(const char *str);
-
-void process_file(FILE *file, stack_t **stack_head);
-void process_token(char *token, stack_t **stack_head, unsigned int line_number);
 
 #endif
