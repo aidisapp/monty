@@ -106,18 +106,22 @@ else
 * pall - prints all nodes in the stack
 * @head: pointer to the head of the stack
 * @line_num: bytecode line number (unused in this function)
+* Return: if the stack is empty, it should not print anything
 */
+
 void pall(stack_t **head, __attribute__((unused)) unsigned int line_num)
 {
-stack_t *temp_node = NULL;
+	stack_t *temp_node = NULL;
 
-if (!head || !*head)
-	return;
+	if (!head || !*head)
+	{
+		return;
+	}
 
-temp_node = *head;
-while (temp_node != NULL)
-{
-	printf("%d\n", temp_node->n);
-	temp_node = temp_node->next;
-}
+	temp_node = *head;
+	while (temp_node != NULL)
+	{
+		printf("%d\n", temp_node->n);
+		temp_node = temp_node->next;
+	}
 }
