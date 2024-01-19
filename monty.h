@@ -49,10 +49,12 @@ void process_file(FILE *file, stack_t **stack_head);
 void process_token(char *token, stack_t **stack_head, unsigned int line_num);
 
 int add_node(stack_t **head, int n);
-void delete_node(stack_t *head);
+void delete_node(stack_t **head);
 void free_list(stack_t **head);
 void push(stack_t **head, unsigned int line_num, const char *token);
 void pall(stack_t **head, __attribute__((unused)) unsigned int line_num);
+void pint(stack_t **head, unsigned int line_num);
+void pop(stack_t **head, unsigned int line_num);
 
 int is_digit(const char *str);
 
