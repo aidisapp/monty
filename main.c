@@ -1,7 +1,5 @@
 #include "monty.h"
 
-#define BUFFER_SIZE 1024
-
 /**
  * get_instruction - Get Monty bytecode instructions.
  * @token: bytecode operator input
