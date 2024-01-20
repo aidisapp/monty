@@ -52,3 +52,21 @@ void swap(stack_t **head, unsigned int line_num)
 	(*head)->n = (*head)->next->n;
 	(*head)->next->n = temp;
 }
+
+/**
+ * add - Adds the top two elements of the stack.
+ * @head: Double pointer to the beginning of the stack.
+ * @line_num: Line number in the Monty bytecodes file.
+ */
+void add(stack_t **head, unsigned int line_num)
+{
+	if (!head || !*head || !(*head)->next)
+	{
+		fprintf(stderr, "L%u: can't add, stack too short\n", line_num);
+		free_list(head);
+		exit(EXIT_FAILURE);
+	}
+
+	(*head)->next->n += (*head)->n;
+	delete_node(head);
+}
