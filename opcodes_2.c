@@ -42,3 +42,21 @@ if ((*head)->n == 0)
 (*head)->next->n /= (*head)->n;
 delete_node(head);
 }
+
+/**
+* mul_op - Multiplies the second top element of the stack with the top element.
+* @head: Double pointer to the beginning of the stack.
+* @line_num: Line number in the Monty bytecodes file.
+*/
+void mul_op(stack_t **head, unsigned int line_num)
+{
+if (!head || !*head || !(*head)->next)
+{
+	fprintf(stderr, "L%u: can't mul, stack too short\n", line_num);
+	free_list(head);
+	exit(EXIT_FAILURE);
+}
+
+(*head)->next->n *= (*head)->n;
+delete_node(head);
+}
