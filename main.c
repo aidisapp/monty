@@ -18,6 +18,7 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 			{"nop", nop},
 			{"sub", sub_op},
 			{"div", div_op},
+			{"mul", mul_op},
 			{NULL, NULL}};
 
 	count = 0;
