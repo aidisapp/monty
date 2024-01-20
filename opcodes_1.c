@@ -54,11 +54,11 @@ void swap(stack_t **head, unsigned int line_num)
 }
 
 /**
- * add - Adds the top two elements of the stack.
+ * add_op - Adds the top two elements of the stack.
  * @head: Double pointer to the beginning of the stack.
  * @line_num: Line number in the Monty bytecodes file.
  */
-void add(stack_t **head, unsigned int line_num)
+void add_op(stack_t **head, unsigned int line_num)
 {
 	if (!head || !*head || !(*head)->next)
 	{
