@@ -60,6 +60,7 @@ void add_op(stack_t **head, unsigned int line_num);
 void nop(stack_t **head, unsigned int line_num);
 void sub_op(stack_t **head, unsigned int line_num);
 void div_op(stack_t **head, unsigned int line_num);
+void mul_op(stack_t **head, unsigned int line_num);
 
 int is_digit(const char *str);
 
