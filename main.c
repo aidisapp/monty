@@ -20,6 +20,7 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 			{"div", div_op},
 			{"mul", mul_op},
 			{"mod", mod_op},
+			{"pchar", pchar},
 			{NULL, NULL}};
 
 	count = 0;
@@ -30,6 +31,36 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 		count++;
 	}
 	return (NULL);
+}
+
+/**
+ * process_token - Process a token from the Monty ByteCodes file.
+ * @token: Token to be processed
+ * @stack_head: Pointer to the head of the stack
+ * @line_num: Current line number in the Monty ByteCodes file
+ */
+
+void process_token(char *token, stack_t **stack_head, unsigned int line_num)
+{
+	void (*operator_function)(stack_t **stack, unsigned int line_num);
+
+	if (token && token[0] == '#')
+		return;
+
+	if (strcmp(token, "push") == 0)
+		push(stack_head, line_num, strtok(NULL, "\n\t\a\r ;:"));
+	else
+	{
+		operator_function = get_instruction(token);
+		if (operator_function != NULL)
+			operator_function(stack_head, line_num);
+		else
+		{
+			free_list(stack_head);
+			fprintf(stderr, "L%d: unknown instruction %s\n", line_num, token);
+			exit(EXIT_FAILURE);
+		}
+	}
 }
 
 /**
@@ -63,37 +94,6 @@ void process_file(FILE *file, stack_t **stack_head)
 	}
 
 	free(buffer);
-}
-
-/**
- * process_token - Process a token from the Monty ByteCodes file.
- * @token: Token to be processed
- * @stack_head: Pointer to the head of the stack
- * @line_num: Current line number in the Monty ByteCodes file
- */
-
-void process_token(char *token, stack_t **stack_head, unsigned int line_num)
-{
-	void (*operator_function)(stack_t **stack, unsigned int line_num);
-
-	if (strcmp(token, "push") == 0)
-	{
-		push(stack_head, line_num, strtok(NULL, "\n\t\a\r ;:"));
-	}
-	else
-	{
-		operator_function = get_instruction(token);
-		if (operator_function != NULL)
-		{
-			operator_function(stack_head, line_num);
-		}
-		else
-		{
-			free_list(stack_head);
-			fprintf(stderr, "L%d: unknown instruction %s\n", line_num, token);
-			exit(EXIT_FAILURE);
-		}
-	}
 }
 
 /**
