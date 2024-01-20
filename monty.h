@@ -56,9 +56,10 @@ void pall(stack_t **head, __attribute__((unused)) unsigned int line_num);
 void pint(stack_t **head, unsigned int line_num);
 void pop(stack_t **head, unsigned int line_num);
 void swap(stack_t **head, unsigned int line_num);
-void add(stack_t **head, unsigned int line_num);
+void add_op(stack_t **head, unsigned int line_num);
 void nop(stack_t **head, unsigned int line_num);
-void sub(stack_t **head, unsigned int line_num);
+void sub_op(stack_t **head, unsigned int line_num);
+void div_op(stack_t **head, unsigned int line_num);
 
 int is_digit(const char *str);
 
