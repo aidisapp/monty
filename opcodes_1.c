@@ -31,3 +31,24 @@ void pop(stack_t **head, unsigned int line_num)
 	else
 		delete_node(head);
 }
+
+/**
+ * swap - Swaps the top two elements of the stack.
+ * @head: Double pointer to the beginning of the stack.
+ * @line_num: Line number in the Monty bytecodes file.
+ */
+void swap(stack_t **head, unsigned int line_num)
+{
+	int temp;
+
+	if (!head || !*head || !(*head)->next)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_num);
+		free_list(head);
+		exit(EXIT_FAILURE);
+	}
+
+	temp = (*head)->n;
+	(*head)->n = (*head)->next->n;
+	(*head)->next->n = temp;
+}
