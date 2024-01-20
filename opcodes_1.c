@@ -22,12 +22,12 @@ void pint(stack_t **head, unsigned int line_num)
  */
 void pop(stack_t **head, unsigned int line_num)
 {
-	if (!head || !*head)
+	if (head == NULL || *head == NULL)
 	{
-		fprintf(stderr, "L%u: can't pop, stack is empty\n", line_num);
+		fprintf(stderr, "L%u: can't pop, stack is emoty\n", line_num);
 		free_list(head);
 		exit(EXIT_FAILURE);
 	}
-
-	delete_node(head);
+	else
+		delete_node(head);
 }
