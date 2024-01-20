@@ -70,3 +70,14 @@ void add(stack_t **head, unsigned int line_num)
 	(*head)->next->n += (*head)->n;
 	delete_node(head);
 }
+
+/**
+ * nop - Does nothing.
+ * @head: Double pointer to the beginning of the stack.
+ * @line_num: Line number in the Monty bytecodes file.
+ */
+void nop(stack_t **head, unsigned int line_num)
+{
+	(void)head;
+	(void)line_num;
+}
