@@ -60,3 +60,29 @@ if (!head || !*head || !(*head)->next)
 (*head)->next->n *= (*head)->n;
 delete_node(head);
 }
+
+/**
+* mod_op - Computes the rest of the division of the second
+* top element by the top element.
+* @head: Double pointer to the beginning of the stack.
+* @line_num: Line number in the Monty bytecodes file.
+*/
+void mod_op(stack_t **head, unsigned int line_num)
+{
+if (!head || !*head || !(*head)->next)
+{
+	fprintf(stderr, "L%u: can't mod, stack too short\n", line_num);
+	free_list(head);
+	exit(EXIT_FAILURE);
+}
+
+if ((*head)->n == 0)
+{
+	fprintf(stderr, "L%u: division by zero\n", line_num);
+	free_list(head);
+	exit(EXIT_FAILURE);
+}
+
+(*head)->next->n %= (*head)->n;
+delete_node(head);
+}
