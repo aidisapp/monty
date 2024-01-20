@@ -55,6 +55,7 @@ void push(stack_t **head, unsigned int line_num, const char *token);
 void pall(stack_t **head, __attribute__((unused)) unsigned int line_num);
 void pint(stack_t **head, unsigned int line_num);
 void pop(stack_t **head, unsigned int line_num);
+void swap(stack_t **head, unsigned int line_num);
 
 int is_digit(const char *str);
 
