@@ -14,9 +14,10 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 			{"pall", pall},
 			{"pop", pop},
 			{"swap", swap},
-			{"add", add},
+			{"add", add_op},
 			{"nop", nop},
-			{"sub", sub},
+			{"sub", sub_op},
+			{"div", div_op},
 			{NULL, NULL}};
 
 	count = 0;
