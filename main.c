@@ -21,6 +21,7 @@ void (*get_instruction(char *token))(stack_t **head, unsigned int line_num)
 			{"mul", mul_op},
 			{"mod", mod_op},
 			{"pchar", pchar},
+			{"pstr", pstr},
 			{NULL, NULL}};
 
 	count = 0;
