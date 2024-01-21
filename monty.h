@@ -63,6 +63,7 @@ void div_op(stack_t **head, unsigned int line_num);
 void mul_op(stack_t **head, unsigned int line_num);
 void mod_op(stack_t **head, unsigned int line_num);
 void pchar(stack_t **head, unsigned int line_num);
+void pstr(stack_t **head, __attribute__((unused)) unsigned int line_num);
 
 int is_digit(const char *str);
 
