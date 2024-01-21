@@ -26,19 +26,20 @@ putchar('\n');
 */
 void rotl(stack_t **head, __attribute__((unused)) unsigned int line_num)
 {
-stack_t *temp_node;
+stack_t *new_top, *last_node;
 
-if (head == NULL || *head == NULL || (*head)->next == NULL)
-	return;
+if (*head != NULL && (*head)->next != NULL)
+{
+	new_top = (*head)->next;
+	last_node = *head;
 
-temp_node = *head;
+	while (last_node->next != NULL)
+	last_node = last_node->next;
 
-while (temp_node->next != NULL)
-	temp_node = temp_node->next;
-
-temp_node->next = *head;
-(*head)->prev = temp_node;
-*head = (*head)->next;
-(*head)->prev = NULL;
-temp_node->next = NULL;
+	last_node->next = *head;
+	(*head)->prev = last_node;
+	*head = new_top;
+	new_top->prev = NULL;
+	last_node->next->next = NULL;
+}
 }
